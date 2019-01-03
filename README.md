@@ -50,19 +50,37 @@ Resolving deltas: 100% (18/18), done.
 
 This folder contains the following folders and files.
 
-``` r
-writeLines(fs::dir_ls("SEG.1.3"))
+``` bash
+SEG1.3
+├── App
+│   ├── App.Rproj
+│   ├── AppLookUpRiskCat.csv
+│   ├── AppRiskPairData.csv
+│   ├── AppSampleDataFile.csv
+│   ├── README.Rmd
+│   ├── README.md
+│   ├── TASKLOG.md
+│   ├── app.R
+│   ├── downloadSampleData.csv
+│   ├── helpers.R
+│   └── www
+│       ├── QuesGenLogo.png
+│       ├── RStudio-Logo-Blue-Gray.png
+│       ├── dts_logo.jpg
+│       ├── heat_map_1.0.png
+│       ├── heatmap_logo.png
+│       ├── save_as_csv.png
+│       ├── shiny.png
+│       ├── tbd.jpg
+│       └── tbd2.jpg
+├── Code
+├── Data
+├── Image
+├── README.Rmd
+├── README.md
+├── README_files
+├── SEG1.3.Rproj
 ```
-
-    SEG.1.3/App
-    SEG.1.3/Code
-    SEG.1.3/Data
-    SEG.1.3/Image
-    SEG.1.3/README.Rmd
-    SEG.1.3/README.md
-    SEG.1.3/README_files
-    SEG.1.3/SEG1.3.Rproj
-    SEG.1.3/rsconnect
 
 **The `SEG.1.3/App` folder**
 
@@ -1133,11 +1151,11 @@ segTable(dat = base::paste0(github_data_root, "VanderbiltComplete.csv")) %>%
 
 <!--html_preserve-->
 
-<div id="htmlwidget-7fc9012cd0a87e3821c1" class="datatables html-widget" style="width:100%;height:auto;">
+<div id="htmlwidget-b538c4c44fb8b0befc22" class="datatables html-widget" style="width:100%;height:auto;">
 
 </div>
 
-<script type="application/json" data-for="htmlwidget-7fc9012cd0a87e3821c1">{"x":{"filter":"none","data":[["1","2","3","4","5"],[1,2,3,4,5],["A","B","C","D","E"],[9474,294,79,21,null],["95.8%","3%","0.8%","0.2%","NA"],["0 - 0.5","&gt; 0.5 - 1.0","&gt; 1.0 - 2.0","&gt; 2.0 - 3.0","&gt; 3.0"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>ID<\/th>\n      <th>Risk Grade<\/th>\n      <th>Number of Pairs<\/th>\n      <th>Percent<\/th>\n      <th>Risk Factor Range<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"lengthChange":false,"dom":"t","rownames":true,"columnDefs":[{"className":"dt-right","targets":[1,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data) {\nvar value=data[1]; $(row).css({'background-color':value == 1.000000 ? 'limegreen' : value == 2.000000 ? 'greenyellow' : value == 3.000000 ? 'yellow' : value == 4.000000 ? 'orange' : value == 5.000000 ? 'red' : ''});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-b538c4c44fb8b0befc22">{"x":{"filter":"none","data":[["1","2","3","4","5"],[1,2,3,4,5],["A","B","C","D","E"],[9474,294,79,21,null],["95.8%","3%","0.8%","0.2%","NA"],["0 - 0.5","&gt; 0.5 - 1.0","&gt; 1.0 - 2.0","&gt; 2.0 - 3.0","&gt; 3.0"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>ID<\/th>\n      <th>Risk Grade<\/th>\n      <th>Number of Pairs<\/th>\n      <th>Percent<\/th>\n      <th>Risk Factor Range<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"lengthChange":false,"dom":"t","rownames":true,"columnDefs":[{"className":"dt-right","targets":[1,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data) {\nvar value=data[1]; $(row).css({'background-color':value == 1.000000 ? 'limegreen' : value == 2.000000 ? 'greenyellow' : value == 3.000000 ? 'yellow' : value == 4.000000 ? 'orange' : value == 5.000000 ? 'red' : ''});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
 
 <!--/html_preserve-->
 
@@ -1285,11 +1303,11 @@ segTable(dat = base::paste0(github_data_root,
 
 <!--html_preserve-->
 
-<div id="htmlwidget-85e58b318f60b9b0b42b" class="datatables html-widget" style="width:100%;height:auto;">
+<div id="htmlwidget-d6da2652a1295f03c7ed" class="datatables html-widget" style="width:100%;height:auto;">
 
 </div>
 
-<script type="application/json" data-for="htmlwidget-85e58b318f60b9b0b42b">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8"],[0,1,2,3,4,5,6,7],["None","Slight, Lower","Slight, Higher","Moderate, Lower","Moderate, Higher","Severe, Lower","Severe, Upper","Extreme"],[9474,294,55,24,11,10,null,null],["95.8%","3%","0.6%","0.2%","0.1%","0.1%","NA","NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>SEG Risk Category<\/th>\n      <th>SEG Risk Category<\/th>\n      <th>Number of Pairs<\/th>\n      <th>Percent<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"lengthChange":false,"dom":"t","rownames":false,"columnDefs":[{"className":"dt-right","targets":[1,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data) {\nvar value=data[1]; $(row).css({'background-color':value == 0.000000 ? '#00EE00' : value == 1.000000 ? '#ADFF2F' : value == 2.000000 ? '#FFFF00' : value == 3.000000 ? '#FFD700' : value == 4.000000 ? '#FFA500' : value == 5.000000 ? '#EE7600' : value == 6.000000 ? '#FF4500' : value == 7.000000 ? '#FF0000' : ''});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-d6da2652a1295f03c7ed">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8"],[0,1,2,3,4,5,6,7],["None","Slight, Lower","Slight, Higher","Moderate, Lower","Moderate, Higher","Severe, Lower","Severe, Upper","Extreme"],[9474,294,55,24,11,10,null,null],["95.8%","3%","0.6%","0.2%","0.1%","0.1%","NA","NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>SEG Risk Category<\/th>\n      <th>SEG Risk Category<\/th>\n      <th>Number of Pairs<\/th>\n      <th>Percent<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"lengthChange":false,"dom":"t","rownames":false,"columnDefs":[{"className":"dt-right","targets":[1,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data) {\nvar value=data[1]; $(row).css({'background-color':value == 0.000000 ? '#00EE00' : value == 1.000000 ? '#ADFF2F' : value == 2.000000 ? '#FFFF00' : value == 3.000000 ? '#FFD700' : value == 4.000000 ? '#FFA500' : value == 5.000000 ? '#EE7600' : value == 6.000000 ? '#FF4500' : value == 7.000000 ? '#FF0000' : ''});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
 
 <!--/html_preserve-->
 
