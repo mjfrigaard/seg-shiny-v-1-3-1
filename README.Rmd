@@ -1066,7 +1066,7 @@ datasetSEG <- segTable(paste0(github_data_root, "VanderbiltComplete.csv"))
 datasetSEG %>% glimpse(78)
 ```
 
-```{r test-segTable}
+```{r test-segTable, results='hide', eval=FALSE}
 segTable(dat = base::paste0(github_data_root, "VanderbiltComplete.csv")) %>% 
         dplyr::count(risk_grade, sort = TRUE) %>%
         dplyr::full_join(x = .,
@@ -1103,6 +1103,14 @@ segTable(dat = base::paste0(github_data_root, "VanderbiltComplete.csv")) %>%
             )
         )
 ```
+
+
+```{r test-segTable.png, echo=FALSE}
+# fs::dir_ls("image")
+knitr::include_graphics(path = "image/test-segTable.png")
+```
+
+
 
 And I can see the new column is here. This has been added into the `app.R` file. 
 
@@ -1194,7 +1202,7 @@ The code to define the `SEGRiskCategoryTable4` is below.
 
 The `segTable()` function passes the example data to the lookup table, then wrangles the variables into the colored table below. 
 
-```{r test-segTable-function-1}
+```{r test-segTable-function-1, results='hide', eval=FALSE}
 segTable(dat = base::paste0(github_data_root, 
                             "VanderbiltComplete.csv")) %>% 
   # get data grouped/tallied by risk_cat
@@ -1234,6 +1242,12 @@ segTable(dat = base::paste0(github_data_root,
                                        "#FFD700", "#FFA500","#EE7600",
                                        "#FF4500", "#FF0000")))
 ```
+
+```{r test-segTable-function-1.png, echo=FALSE}
+# fs::dir_ls("image")
+knitr::include_graphics(path = "image/test-segTable-function-1.png")
+```
+
 
 
 > ISO range = difference between BGM and REF as percent of REF for REF > 100 mg/dL and in mg/dL for REF <= 100 mg/dL.

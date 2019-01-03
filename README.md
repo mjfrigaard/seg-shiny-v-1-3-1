@@ -1149,15 +1149,7 @@ segTable(dat = base::paste0(github_data_root, "VanderbiltComplete.csv")) %>%
         )
 ```
 
-<!--html_preserve-->
-
-<div id="htmlwidget-b538c4c44fb8b0befc22" class="datatables html-widget" style="width:100%;height:auto;">
-
-</div>
-
-<script type="application/json" data-for="htmlwidget-b538c4c44fb8b0befc22">{"x":{"filter":"none","data":[["1","2","3","4","5"],[1,2,3,4,5],["A","B","C","D","E"],[9474,294,79,21,null],["95.8%","3%","0.8%","0.2%","NA"],["0 - 0.5","&gt; 0.5 - 1.0","&gt; 1.0 - 2.0","&gt; 2.0 - 3.0","&gt; 3.0"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>ID<\/th>\n      <th>Risk Grade<\/th>\n      <th>Number of Pairs<\/th>\n      <th>Percent<\/th>\n      <th>Risk Factor Range<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"lengthChange":false,"dom":"t","rownames":true,"columnDefs":[{"className":"dt-right","targets":[1,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data) {\nvar value=data[1]; $(row).css({'background-color':value == 1.000000 ? 'limegreen' : value == 2.000000 ? 'greenyellow' : value == 3.000000 ? 'yellow' : value == 4.000000 ? 'orange' : value == 5.000000 ? 'red' : ''});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
-
-<!--/html_preserve-->
+![](image/test-segTable.png)<!-- -->
 
 And I can see the new column is here. This has been added into the
 `app.R` file.
@@ -1301,15 +1293,7 @@ segTable(dat = base::paste0(github_data_root,
                                        "#FF4500", "#FF0000")))
 ```
 
-<!--html_preserve-->
-
-<div id="htmlwidget-d6da2652a1295f03c7ed" class="datatables html-widget" style="width:100%;height:auto;">
-
-</div>
-
-<script type="application/json" data-for="htmlwidget-d6da2652a1295f03c7ed">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8"],[0,1,2,3,4,5,6,7],["None","Slight, Lower","Slight, Higher","Moderate, Lower","Moderate, Higher","Severe, Lower","Severe, Upper","Extreme"],[9474,294,55,24,11,10,null,null],["95.8%","3%","0.6%","0.2%","0.1%","0.1%","NA","NA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>SEG Risk Category<\/th>\n      <th>SEG Risk Category<\/th>\n      <th>Number of Pairs<\/th>\n      <th>Percent<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"lengthChange":false,"dom":"t","rownames":false,"columnDefs":[{"className":"dt-right","targets":[1,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data) {\nvar value=data[1]; $(row).css({'background-color':value == 0.000000 ? '#00EE00' : value == 1.000000 ? '#ADFF2F' : value == 2.000000 ? '#FFFF00' : value == 3.000000 ? '#FFD700' : value == 4.000000 ? '#FFA500' : value == 5.000000 ? '#EE7600' : value == 6.000000 ? '#FF4500' : value == 7.000000 ? '#FF0000' : ''});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
-
-<!--/html_preserve-->
+![](image/test-segTable-function-1.png)<!-- -->
 
 > ISO range = difference between BGM and REF as percent of REF for REF
 > \> 100 mg/dL and in mg/dL for REF \<= 100 mg/dL. Klonoff, D. C., et
