@@ -3,13 +3,24 @@ SEG Shiny Heatmap (version 1.3.1)
 Martin Frigaard
 2019-01-02
 
+# Welcome to the SEG Shiny app project page
+
+This page outlines the code used to develop the SEG application. The
+working version is on the Diabetes Technology Society website
+[here](https://www.diabetestechnology.org/seg/). The preview version
+(not necessarily stable) is available
+[here](https://n3wsandnumb3rs.shinyapps.io/seg-shiny-v-1-3-1/).
+
+For questions, issues, or feature requests, please email Martin at
+<martin@newsandnumbers.org>.
+
 **HEADER:**
 
   - **Created date:** 2019-01-02
 
   - **R version:** R version 3.5.1 (2018-07-02)
 
-# Issues
+# Previous Issues
 
 **The issues/bugs/fixes for the application version 1.3.1**:
 
