@@ -1915,22 +1915,86 @@ This code remains unchanged in version 1.3.1
 
 ``` r
 # 7.0 - <Mod Bland-Altman Tab> RENDER MOD-BA ----- ----- -----
-output$modba_plot <- renderPlot({
-    datasetSEG() %>% # 7.1 calculate LN of REF and BGM -----
-    dplyr::mutate(lnREF = log(REF), lnBGM = log(BGM), lnDiff = lnBGM - lnREF, 
-        rel_perc_diff = exp(lnDiff) - 1) %>% # 7.2 create points layer -----
-    ggplot2::ggplot(aes(x = REF, y = rel_perc_diff)) + ggplot2::geom_point(alpha = 0.5, 
-        color = "royalblue") + ggplot2::scale_y_continuous(name = "% Error", 
-        limits = c(-0.5, 0.5)) + # 7.3 use SEGBlandAltmanRefVals from helpers.R file -----
-    ggplot2::geom_line(aes(x = Ref, y = UB), data = SEGBlandAltmanRefVals, linetype = "dotted", 
-        color = "red", size = 1.5) + ggplot2::geom_line(aes(x = Ref, y = LB), 
-        data = SEGBlandAltmanRefVals, linetype = "dotted", color = "red", size = 1.5) + 
-        theme(plot.title = element_text(size = 20), axis.title.x = element_text(size = 18), 
-            axis.title.y = element_text(size = 18), axis.text.x = element_text(size = 12), 
-            axis.text.y = element_text(size = 12), legend.title = element_text(size = 16), 
-            legend.text = element_text(size = 14)) + ggplot2::labs(x = "Reference (mg/dL)", 
-        title = "Modified Bland-Altman Plot", subtitle = "Blood Glucose Monitoring System Surveillance Program")
-})
+  output$modba_plot <- renderPlot({
+    
+    datasetSEG() %>%
+      
+      # 7.1 calculate LN of REF and BGM -----
+      
+      dplyr::mutate( 
+        
+        lnREF = log(REF),
+        
+        lnBGM = log(BGM),
+        
+        lnDiff = lnBGM - lnREF,
+        
+        rel_perc_diff = exp(lnDiff) - 1
+        
+      ) %>%
+      
+      # 7.2 create points layer ----- 
+      ggplot2::ggplot(aes(x = REF, 
+                          y = rel_perc_diff)) +
+      
+      ggplot2::geom_point(alpha = 0.5, color = "royalblue") +
+      
+      ggplot2::scale_y_continuous(
+        
+        name = "% Error",
+        
+        limits = c(-0.50, 0.50)
+        
+      ) +
+      
+      # 7.3 use SEGBlandAltmanRefVals from helpers.R file -----
+      
+      ggplot2::geom_line(aes(x = Ref, y = UB),
+                         
+        data = SEGBlandAltmanRefVals,
+        
+        linetype = "dotted",
+        
+        color = "red",
+        
+        size = 1.5
+        
+      ) +
+      
+      ggplot2::geom_line(aes(x = Ref, y = LB),
+                         
+        data = SEGBlandAltmanRefVals,
+        
+        linetype = "dotted",
+        
+        color = "red",
+        
+        size = 1.5
+        
+      ) +
+      theme(plot.title = element_text(size = 20),
+            
+            axis.title.x = element_text(size = 18),
+            
+            axis.title.y = element_text(size = 18),
+            
+            axis.text.x = element_text(size = 12),
+            
+            axis.text.y = element_text(size = 12),
+            
+            legend.title = element_text(size = 16),
+            
+            legend.text = element_text(size = 14)) +
+      
+      ggplot2::labs(
+        
+        x = "Reference (mg/dL)",
+        
+        title = "Modified Bland-Altman Plot",
+        
+        subtitle = "Blood Glucose Monitoring System Surveillance Program"
+      )
+  })
 ```
 
 ### SEG Graph download
