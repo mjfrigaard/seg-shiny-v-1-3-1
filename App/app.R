@@ -914,7 +914,7 @@ server <- shinyServer(function(input, output) {
       alpha = input$alpha,
       fill = input$color,
       size = input$size, # 6.6.2 - plot use input for size value ----
-      stroke = 1
+      stroke = 0.4
     ) +
       theme(plot.title = element_text(size = 20),
             axis.title.x = element_text(size = 18),
@@ -990,16 +990,17 @@ server <- shinyServer(function(input, output) {
       if (input$heatmap_file == "png") {
         png(filename = file, 
             units = "in",
-            res = 72,
+            res = 96,
             width = 9, 
-            height = 7)
+            height = 7.7)
       } 
       
       # open the pdf device
       else {
         pdf(file = file, 
+            paper = "USr", 
             width = 9, 
-            height = 7)
+            height = 7.7)
       } 
 
       print(
@@ -1017,7 +1018,7 @@ server <- shinyServer(function(input, output) {
           alpha = input$alpha,
           fill = input$color,
           size = input$size, 
-          stroke = 1
+          stroke = 0.4
         ) +
 
           # 8.6 - title input for the SEG graph for download ---- ---- 

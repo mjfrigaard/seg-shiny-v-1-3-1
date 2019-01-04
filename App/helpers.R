@@ -103,9 +103,9 @@ lkpISORanges <- tibble::tribble(
 # lkpISORanges
 
 # 1.0.0 - DEFINE heatmap inputs ============= ----
-
 # 1.0.1 - download seg_gaussian_layer_shiny.rds ----- -----
-download.file(url = paste0(github_data_root, "seg_gaussian_layer_shiny.rds"), 
+download.file(url = paste0(github_data_root, 
+                           "seg_gaussian_layer_shiny.rds"), 
               destfile = "seg_gaussian_layer_shiny.rds")
 
 # 1.0.2 - load rds file -----

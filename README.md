@@ -1,7 +1,7 @@
 SEG Shiny Heatmap (version 1.3.1)
 ================
 Martin Frigaard
-2019-01-02
+2019-01-03
 
 # Welcome to the SEG Shiny app project page
 
@@ -16,7 +16,7 @@ For questions, issues, or feature requests, please email Martin at
 
 **HEADER:**
 
-  - **Created date:** 2019-01-02
+  - **Created date:** 2019-01-03
 
   - **R version:** R version 3.5.1 (2018-07-02)
 
@@ -27,9 +27,8 @@ For questions, issues, or feature requests, please email Martin at
 1.  In the 5-category summary table, there is a column labelled `REF
     Range`. It should be `Risk Factor Range`.
 
-2.  The heatmap-style background needs to be smoothed. Josh Senyak
-    (<josh.senyak@quicksilverconsulting.com>) has provided an image for
-    the background.
+2.  The heatmap-style background needs to be smoothed (with supplied
+    Gaussian smoothed image.)
 
 3.  The order of the entries in the Summary Table should be changed to
     have the order below:
@@ -43,7 +42,13 @@ For questions, issues, or feature requests, please email Martin at
     REF > 600 : Excluded from SEG Analysis
     Total Included in SEG Analysis
 
-# Source for files, code, etc.
+4.  The downloadable SEG plots need to be square:
+
+*We would also like the SEG graphs to always be perfectly square (in the
+SEG tab they are much wider than they are tall, and in the downloaded
+graphics they are still slightly wider).*
+
+# Download the source data files, code, etc.
 
 This was downloaded using
 git:
@@ -1545,18 +1550,11 @@ image.
   })
 ```
 
-#### Upload the image via the helpers.R file
+### Previous SEG plot data elements in helpers.R file (1.3)
 
 The image download/upload code was added to the `helpers.R` file.
 
 ``` r
-# 1.0 - DEFINE heatmap inputs ============= ---- 1.0.1 read
-# BackgroundSmooth.png with readPNG ----- -----
-library(jpeg)
-library(png)
-download.file(url = paste0(github_image_root, "BackgroundSmooth.png"), destfile = "www/BackgroundSmooth.png")
-BackgroundSmooth <- png::readPNG("www/BackgroundSmooth.png")
-
 # 1.0.2 mmol conversion factor ---- -----
 mmolConvFactor <- 18.01806
 
@@ -1573,24 +1571,117 @@ abs_risk_2.7500_color <- rgb2hex(255, 0, 0)
 abs_risk_4.0000_color <- rgb2hex(128, 0, 0)
 riskfactor_colors <- c(abs_risk_0.0000_color, abs_risk_0.4375_color, abs_risk_1.0625_color, 
     abs_risk_2.7500_color, abs_risk_4.0000_color)
-
 # 1.0.5 create base_data data frame ---- -----
 base_data <- data.frame(x_coordinate = 0, y_coordinate = 0, color_gradient = c(0:4))
 ```
 
-### The data inputs for SEG plot
+### Previous SEG graph 1.3 (with ggplot2)
 
-This plot requires the following data inputs (\*these are also in the
-`helpers.R`
-files).
+Outside of the application, the previous plot can be built using the
+code below.
 
 ``` r
-# 1.0 - DEFINE heatmap inputs ============= 1.0.1 read BackgroundSmooth.png
-# with readPNG ----- -----
+# 1 - base layer ---- ---- ---- ---- ---- ---- ---- ----
+base_layer <- ggplot() +
+  geom_point(
+    data = base_data, # defines data frame
+    aes(
+      x = x_coordinate,
+      y = y_coordinate,
+      fill = color_gradient
+    )
+  ) # + # uses x, y, color_gradient
+# 2 - risk pair data layer  ---- ---- ---- ---- ---- ---- ---- ----
+risk_layer <- base_layer +
+  geom_point(
+    data = RiskPairData, # new data set
+    aes(
+      x = REF, # additional aesthetics from new data set
+      y = BGM,
+      color = abs_risk
+    ),
+    show.legend = FALSE
+  )  +
+  ggplot2::scale_color_gradientn(
+    colors = riskfactor_colors, # these are defined above with rgb2hex function
+    guide = "none",
+    limits = c(0, 4),
+    values = scales::rescale(c(
+      0, # darkgreen
+      0.4375, # green
+      1.0625, # yellow
+      2.7500, # red
+      4.0000
+    ))
+  )
+# 3 - add color gradient  ---- ---- ---- ---- ---- ---- ---- ---- ---- 
+risk_level_color_gradient <- risk_layer +
+  ggplot2::scale_fill_gradientn( # scale_*_gradientn creats a n-color gradient
+    values = scales::rescale(c(
+      0, # darkgreen
+      0.4375, # green
+      1.0625, # yellow
+      2.75, # red
+      4.0 # brown
+    )), 
+    limits = c(0, 4),
+    colors = riskfactor_colors,
+    guide = guide_colorbar(
+      ticks = FALSE,
+      barheight = unit(100, "mm")
+    ),
+    breaks = c(
+      0.25,
+      1,
+      2,
+      3,
+      3.75
+    ),
+    labels = c(
+      "none",
+      "slight",
+      "moderate",
+      "high",
+      "extreme"
+    ),
+    name = "risk level"
+  )
+# 4 - add x and y axis  ---- ---- ---- ---- ---- ---- ---- ---- ---- 
+# Add the new color scales to the scale_y_continuous()
+heatmap_plot <- risk_level_color_gradient +
+  ggplot2::scale_y_continuous(
+    limits = c(0, 600),
+    sec.axis =
+      sec_axis(~. / mmolConvFactor,
+        name = "measured blood glucose (mmol/L)"
+      ),
+    name = "measured blood glucose (mg/dL)"
+  ) +
+  scale_x_continuous(
+    limits = c(0, 600),
+    sec.axis =
+      sec_axis(~. / mmolConvFactor,
+        name = "reference blood glucose (mmol/L)"
+      ),
+    name = "reference blood glucose (mg/dL)"
+  )
+heatmap_plot
+```
+
+![](README_files/figure-gfm/heatmap-version-1-1.png)<!-- -->
+
+### New data/image inputs for SEG plot 1.3.1
+
+In order to build the new plot with the Gaussian smoothed background, a
+new image `seg600.png` needs to be uploaded as a layer.
+
+``` r
+# 1.0 - DEFINE heatmap inputs ============= 1.0.1 read seg600.png with
+# readPNG ----- -----
 library(jpeg)
 library(png)
-download.file(url = paste0(github_image_root, "BackgroundSmooth.png"), destfile = "Image/BackgroundSmooth.png")
-BackgroundSmooth <- png::readPNG("Image/BackgroundSmooth.png")
+download.file(url = paste0(github_image_root, "seg600.png"), destfile = "Image/seg600.png")
+BackgroundSmooth <- png::readPNG("Image/seg600.png")
 # 1.0.2 mmol conversion factor ---- -----
 mmolConvFactor <- 18.01806
 # 1.0.3 rgb2hex function ---- ----- This is the RGB to Hex number function
@@ -1642,67 +1733,43 @@ base_data
 5            0            0              4
 ```
 
-### The SEG graph 1.3 (with ggplot2)
-
-Outside of the application, the plot can be built using the code below.
+First create the base layer, but add the axes formats and adjust the
+point to be almost non-existent.
 
 ``` r
-# 6.1 - create base_layer plot ---- 
-base_layer <- ggplot() +
-  geom_point(
-    data = base_data, # defines data frame
-    aes(
-      x = x_coordinate,
-      y = y_coordinate,
-      fill = color_gradient
-    )
-  )
-base_layer
+# 6.1 - create scales_layer plot ----
+base_layer <- base_data %>% ggplot(aes(x = x_coordinate, y = y_coordinate, fill = color_gradient)) + 
+    geom_point(size = 1e-08, color = "white")
+scales_layer <- base_layer + ggplot2::scale_y_continuous(limits = c(0, 600), 
+    sec.axis = sec_axis(~./mmolConvFactor, name = "Measured blood glucose (mmol/L)"), 
+    name = "Measured blood glucose (mg/dL)") + scale_x_continuous(limits = c(0, 
+    600), sec.axis = sec_axis(~./mmolConvFactor, name = "Reference blood glucose (mmol/L)"), 
+    name = "Reference blood glucose (mg/dL)")
+scales_layer
 ```
 
-![](README_files/figure-gfm/gaussian-base_layer-1.png)<!-- -->
+![](README_files/figure-gfm/base_layer-1.png)<!-- -->
 
-This portion adds the `BackgroundSmooth` image and defines the `width`
-and `height` for the image.
+Now that the axes are set, I can add the smoothed image and create a
+`gaussian_layer`.
 
 ``` r
 # 6.2 - the background_smooth_layer ----
-background_smooth_layer <- base_layer + ggplot2::annotation_custom(grid::rasterGrob(image = BackgroundSmooth, 
-    width = unit(1, "npc"), height = unit(1, "npc")), -Inf, Inf, -Inf, Inf)
-background_smooth_layer
+gaussian_layer <- scales_layer + ggplot2::annotation_custom(grid::rasterGrob(image = BackgroundSmooth, 
+    width = unit(1, "npc"), height = unit(1, "npc")), xmin = 0, xmax = 600, 
+    ymin = 0, ymax = 600)
+gaussian_layer
 ```
 
-![](README_files/figure-gfm/background_smooth_layer-1.png)<!-- -->
+![](README_files/figure-gfm/gaussian_layer-1.png)<!-- -->
 
-This layer defines the point `shape`, `fill`, `size`, `stroke` for the
-plot. This might be a little early, because the uploaded data is added
-in the final
-layer.
+In the next layer, I’ll add the color gradient scaling and values, and
+also the cutom labels for each level.
 
 ``` r
-points_layer_1 <- background_smooth_layer + # add the points layer (1) REMOVE ----
-ggplot2::geom_point(shape = 21, fill = "white", size = 1.2, stroke = 1)
-points_layer_1
-```
-
-![](README_files/figure-gfm/points_layer_1-REMOVED-1.png)<!-- -->
-
-This is identical to the layer above, so `points_layer_1` can be
-removed.
-
-``` r
-rm(points_layer_1)
-```
-
-The next layer adds the red/green colors for the `color_gradient` (now
-in blue), the levels (`"none"`, `"slight"`, `"moderate"`, `"high"`,
-`"extreme"`), the barheight (`barheight = unit(100, "mm")`, and the
-title (`"risk level"`).
-
-``` r
-scale_fill_gradientn_layer_1 <- background_smooth_layer +
-  # 6.3 - add the scale fill (scale_fill_gradientn) (1) ---- 
-  ggplot2::scale_fill_gradientn( 
+# 6.3 - the seg_gaussian_layer_shiny ---- 
+seg_gaussian_layer_shiny <- gaussian_layer + 
+    ggplot2::scale_fill_gradientn( # scale_*_gradientn creats a n-color gradient
     values = scales::rescale(c(
       0, # darkgreen
       0.4375, # green
@@ -1730,183 +1797,51 @@ scale_fill_gradientn_layer_1 <- background_smooth_layer +
       "high",
       "extreme"
     ),
-    name = "risk level"
-  ) 
-scale_fill_gradientn_layer_1
-```
-
-![](README_files/figure-gfm/scale_fill_gradientn_layer_1-1.png)<!-- -->
-
-Next we color the `scale_color_gradientn` again, but this appears to be
-an unnecessary layer.
-
-``` r
-scale_fill_gradientn_layer_2 <- scale_fill_gradientn_layer_1 +
-  # add the scale_color_gradientn (2) REMOVE ---- 
-  # these are defined above with rgb2hex function
-  ggplot2::scale_color_gradientn(
-    colors = riskfactor_colors, 
-    guide = "none",
-    limits = c(0, 4),
-    values = scales::rescale(c(
-      0, # darkgreen
-      0.4375, # green
-      1.0625, # yellow
-      2.7500, # red
-      4.0000
-    ))
-  ) 
-scale_fill_gradientn_layer_2
-```
-
-![](README_files/figure-gfm/scale_fill_gradientn_layer_2-REMOVED-1.png)<!-- -->
-
-The `scale_fill_gradientn_layer_2` layer doesn’t change the plot at all,
-so I will remove this layer and stick with
-`scale_fill_gradientn_layer_1`.
-
-``` r
-rm(scale_fill_gradientn_layer_2)
-```
-
-In the next step, I format the
-y-axis.
-
-``` r
-y_axis_scale <- scale_fill_gradientn_layer_1 + # 6.4 - format the y axis ----
-ggplot2::scale_y_continuous(limits = c(0, 600), sec.axis = sec_axis(~./mmolConvFactor, 
-    name = "measured blood glucose (mmol/L)"), name = "measured blood glucose (mg/dL)")
-y_axis_scale
-```
-
-![](README_files/figure-gfm/y_axis_scale-1.png)<!-- -->
-
-Now that there are labels on both ends of the y-axis, I can add the
-labels for the x-axis below.
-
-``` r
-x_axis_scale <- y_axis_scale + # 6.5 - format the x axis ----
-scale_x_continuous(limits = c(0, 600), sec.axis = sec_axis(~./mmolConvFactor, 
-    name = "reference blood glucose (mmol/L)"), name = "reference blood glucose (mg/dL)")
-x_axis_scale
-```
-
-![](README_files/figure-gfm/x_axis_scale-1.png)<!-- -->
-
-Now that we have the a nice base layer plot, we can introduce the
-uploaded data frame (`SampMeasData` in this case) to plot in the final
-layer.
-
-``` r
-# 6.6 - introduce sample data frame -----
-heat_map_2.0 <- x_axis_scale + geom_point(data = SampMeasData, aes(x = REF, 
-    y = BGM), shape = 21, fill = "white", size = 1.2, stroke = 1)
-heat_map_2.0
-```
-
-![](README_files/figure-gfm/render-heat_map_2.0-1.png)<!-- -->
-
-### SEG graph version 1.3.1 (ggplot2)
-
-After reducing the layers and adding the image, the new code for the SEG
-graph is below. I will remove the previous layers in the code chunk
-below before
-building.
-
-``` r
-rm(base_layer, background_smooth_layer, scale_fill_gradientn_layer_1, y_axis_scale, 
-    x_axis_scale, heat_map_2.0)
-```
-
-In version 1.3.1, the SEG graph will be built outside of the application
-and added as an `.rds` object (like an uploaded data file), then the
-sample data will be added into it.
-
-``` r
-# 6.1 - create base_layer plot ---- 
-base_layer <- ggplot() +
-  geom_point(
-    data = base_data, # defines data frame
-    aes(
-      x = x_coordinate,
-      y = y_coordinate,
-      fill = color_gradient
-    )
-  )
-
-# 6.2 - the BackgroundSmooth layer ---- 
-seg_gaussian_layer_shiny <- base_layer +
-  ggplot2::annotation_custom(
-    grid::rasterGrob(image = BackgroundSmooth, 
-                               width = unit(1,"npc"), 
-                               height = unit(1,"npc")), 
-                               -Inf, Inf, -Inf, Inf) +
-
-# 6.3 - add the scale fill (scale_fill_gradientn) (1) ---- 
-  ggplot2::scale_fill_gradientn( 
-    values = scales::rescale(c(
-      0, # darkgreen
-      0.4375, # green
-      1.0625, # yellow
-      2.75, # red
-      4.0 # brown
-    )), 
-    limits = c(0, 4),
-    colors = riskfactor_colors,
-    guide = guide_colorbar(
-      ticks = FALSE,
-      barheight = unit(100, "mm")
-    ),
-    breaks = c(
-      0.25,
-      1,
-      2,
-      3,
-      3.75
-    ),
-    labels = c(
-      "none",
-      "slight",
-      "moderate",
-      "high",
-      "extreme"
-    ),
-    name = "risk level"
-  ) + 
-
-# 6.4 - format the y axis ---- 
-  ggplot2::scale_y_continuous(
-    limits = c(0, 600),
-    sec.axis =
-      sec_axis(~. / mmolConvFactor,
-        name = "measured blood glucose (mmol/L)"
-      ),
-    name = "measured blood glucose (mg/dL)"
-  ) +
-
-# 6.5 - format the x axis (seg_gaussian_layer_shiny) ---- 
-  scale_x_continuous(
-    limits = c(0, 600),
-    sec.axis =
-      sec_axis(~. / mmolConvFactor,
-        name = "reference blood glucose (mmol/L)"
-      ),
-    name = "reference blood glucose (mg/dL)"
-  ) 
+    name = "risk level")
 seg_gaussian_layer_shiny
 ```
 
-![](README_files/figure-gfm/seg_gaussian_layer_shiny-1-3-1-1.png)<!-- -->
+![](README_files/figure-gfm/seg_gaussian_layer_shiny-1.png)<!-- -->
 
-Now export this object and reload the gaussian layer to plot sample data
-onto.
+In the final layer, I’ll add the sample data to the
+`seg_gaussian_layer_shiny` plot.
+
+``` r
+heatmap_plot <- seg_gaussian_layer_shiny +
+  geom_point(
+    data = SampMeasData, # introduce sample data frame
+    aes(
+      x = REF,
+      y = BGM
+    ),
+    shape = 21,
+    fill = "white",
+    size = 1.1,
+    stroke = 0.4,
+    alpha = 0.8
+  )
+heatmap_plot
+```
+
+![](README_files/figure-gfm/heatmap_plot-1.png)<!-- -->
+
+For quicker plotting and loading, I will export the
+`seg_gaussian_layer_shiny` object and load it into the `helpers.R`
+file.
 
 ``` r
 readr::write_rds(x = seg_gaussian_layer_shiny, path = "Data/seg_gaussian_layer_shiny.rds", 
     compress = "gz")
-# This file has been uploaded to
-# ~/seg-shiny-data/tree/master/Data/seg_gaussian_layer_shiny.rds remove
-# seg_gaussian_layer_shiny
+```
+
+This was uploaded to the [shiny data
+repo](https://github.com/mjfrigaard/seg-shiny-data),
+
+Just to make sure this works, I will remove this object and build the
+SEG plot like I would in the Shiny application.
+
+``` r
+# remove seg_gaussian_layer_shiny
 rm(seg_gaussian_layer_shiny)
 # now download web version to test
 download.file(url = paste0(github_data_root, "seg_gaussian_layer_shiny.rds"), 
@@ -1915,12 +1850,18 @@ download.file(url = paste0(github_data_root, "seg_gaussian_layer_shiny.rds"),
 seg_gaussian_layer_shiny <- readr::read_rds("Data/seg_gaussian_layer_shiny.rds")
 ```
 
+``` r
+seg_gaussian_layer_shiny
+```
+
+![](README_files/figure-gfm/check-seg_gaussian_layer_shiny-1.png)<!-- -->
+
 Now I add the sample data to the gaussian layer.
 
 ``` r
 # 6.6 - introduce sample data frame -----
 heat_map_2.0 <- seg_gaussian_layer_shiny + geom_point(data = SampMeasData, aes(x = REF, 
-    y = BGM), shape = 21, fill = "white", size = 1.2, stroke = 1)
+    y = BGM), shape = 21, fill = "white", size = 1.1, stroke = 0.4, alpha = 0.8)
 
 # final plot -------
 heat_map_2.0
@@ -1954,7 +1895,7 @@ This is the version that goes into the Shiny application in version
       alpha = input$alpha,
       fill = input$color,
       size = input$size, # 6.6.2 - plot use input for size value ----
-      stroke = 1
+      stroke = 0.4,
     ) +
       theme(plot.title = element_text(size = 20),
             axis.title.x = element_text(size = 18),
@@ -2014,16 +1955,17 @@ This portion of code controls how the SEG graph gets downloaded.
       if (input$heatmap_file == "png") {
         png(filename = file, 
             units = "in",
-            res = 72,
+            res = 96,
             width = 9, 
-            height = 7)
+            height = 7.7)
       } 
       
       # open the pdf device
       else {
         pdf(file = file, 
+            paper = "USr", 
             width = 9, 
-            height = 7)
+            height = 7.7)
       } 
 
       print(
