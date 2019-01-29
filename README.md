@@ -1,7 +1,7 @@
 SEG Shiny Heatmap (version 1.3.1)
 ================
 Martin Frigaard
-2019-01-03
+2019-01-29
 
 # Welcome to the SEG Shiny app project page
 
@@ -16,7 +16,7 @@ For questions, issues, or feature requests, please email Martin at
 
 **HEADER:**
 
-  - **Created date:** 2019-01-03
+  - **Created date:** 2019-01-29
 
   - **R version:** R version 3.5.1 (2018-07-02)
 
@@ -47,6 +47,11 @@ For questions, issues, or feature requests, please email Martin at
 *We would also like the SEG graphs to always be perfectly square (in the
 SEG tab they are much wider than they are tall, and in the downloaded
 graphics they are still slightly wider).*
+
+5.  **Added 2019-01-29** There was an issue with decimal places and
+    European .csv files (see Github issue
+    [here](https://github.com/quesgen/seg-shiny-1-3-1/issues/1#issue-404442866)).
+    A new set of instructions were added to the first tab.
 
 # Download the source data files, code, etc.
 

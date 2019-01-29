@@ -260,7 +260,7 @@ h6("Questions? Email support@quesgen.com")
             tags$hr(),
 
         img(
-          src = "save_as_csv.png",
+          src = "save-as-csv.png",
           width = "80%",
           height = "80%"
         ),
